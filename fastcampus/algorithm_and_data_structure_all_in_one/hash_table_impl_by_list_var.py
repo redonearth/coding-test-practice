@@ -1,8 +1,13 @@
+import hashlib
+
 hash_table = list([0 for i in range(8)])
 
 
 def get_key(data):
-    return hash(data)
+    hash_object = hashlib.sha256()
+    hash_object.update(data.encode())
+    hex_dig = hash_object.hexdigest()
+    return int(hex_dig, 16)  # 16진수의 문자열을 10진수로 변환
 
 
 def hash_function(key):
@@ -37,9 +42,6 @@ def read_data(data):
 
 save_data('Redonearth', '01010001000')
 save_data('Koongdori', '01020002000')
-save_data('Dave', '01030003000')
-save_data('Dd', '01040004000')
 
 print(read_data('Redonearth'))
-print(read_data('Dd'))
-print(hash_table)
+print(read_data('Koongdori'))
