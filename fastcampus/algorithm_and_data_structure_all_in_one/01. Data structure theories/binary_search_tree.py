@@ -1,5 +1,8 @@
 # 이진 탐색 트리(Binary Search Tree) 구현
 
+import random
+
+
 class Node:
     def __init__(self, value):
         self.value = value
@@ -68,7 +71,7 @@ class NodeMgmt:
             del self.current_node
 
         # Case 2. 삭제할 Node가 Child Node를 한 개 가지고 있을 경우
-        if self.current_node.left != None and self.current_node.right == None:
+        elif self.current_node.left != None and self.current_node.right == None:
             if value < self.parent.value:
                 self.parent.left = self.current_node.left
             else:
@@ -80,7 +83,7 @@ class NodeMgmt:
                 self.parent.right = self.current_node.right
 
         # Case 3. 삭제할 Node가 Child Node를 두 개 가지고 있을 경우
-        if self.current_node.left != None and self.current_node.right != None:
+        elif self.current_node.left != None and self.current_node.right != None:
             # 3-1. 삭제할 Node가 Child Node를 두 개 가지고 있을 경우 (삭제할 Node가 Parent Node의 왼쪽에 있을 때)
             if value < self.parent.value:
                 self.change_node = self.current_node.right
@@ -107,16 +110,37 @@ class NodeMgmt:
                 else:
                     self.change_node_parent.left = None
                 self.parent.right = self.change_node
-                self.change_node.left = self.current_node.left
                 self.change_node.right = self.current_node.right
+                self.change_node.left = self.current_node.left
+
+        return True
 
 
-head = Node(1)
-BST = NodeMgmt(head)
-BST.insert(0)
-BST.insert(3)
-BST.insert(6)
-BST.insert(7)
-BST.insert(9)
+# [테스트] 0 ~ 999의 숫자 중 임의로 100개를 추출해서, 이진 탐색 트리에 입력, 검색, 삭제
+# 1. 0 ~ 999 중, 100개의 숫자 랜덤 선택
+bst_nums = set()
+while len(bst_nums) != 100:
+    bst_nums.add(random.randint(0, 999))
+# print(bst_nums)
 
-print(BST.search(-1))
+# 2. 선택된 100개의 숫자를 이진 탐색 트리에 입력, 임의로 루트 노드는 500을 넣기로 함
+head = Node(500)
+binary_search_tree = NodeMgmt(head)
+for num in bst_nums:
+    binary_search_tree.insert(num)
+
+# 3. 입력한 100개의 숫자 검색 (검색 기능 확인)
+for num in bst_nums:
+    if binary_search_tree.insert(num) == False:
+        print('Search failed,', num)
+
+# 4. 입력한 100개의 숫자 중 10개의 숫자를 랜덤 선택
+delete_nums = set()
+bst_nums = list(bst_nums)
+while len(delete_nums) != 10:
+    delete_nums.add(bst_nums[random.randint(0, 99)])
+
+# 5. 선택한 10개의 숫자를 삭제 (삭제 기능 확인)
+for del_num in delete_nums:
+    if binary_search_tree.delete(num) == False:
+        print('Delete failed', del_num)
